@@ -1,6 +1,4 @@
-Django>=4.2.19,<4.3.0
-django-crispy-forms>=2.0
-crispy-bootstrap5>=0.7
-django-ckeditor>=6.7.0
-django-cleanup>=8.0.0
-django-compressor>=4.4
+Django>=4.2.0
+Pillow>=9.5.0
+django-ckeditor>=6.5.1
+django-select2>=8.1.2

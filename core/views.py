@@ -45,6 +45,19 @@ def patient_detail(request, pk):
     })
 
 @login_required
+def patient_edit(request, pk):
+    patient = get_object_or_404(Patient, pk=pk)
+    if request.method == 'POST':
+        form = PatientForm(request.POST, instance=patient)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Patient updated successfully.')
+            return redirect('patient_detail', pk=patient.pk)
+    else:
+        form = PatientForm(instance=patient)
+    return render(request, 'core/patient_form.html', {'form': form, 'title': 'Edit Patient'})
+
+@login_required
 def daily_memo_create(request):
     if request.method == 'POST':
         form = DailyMemoForm(request.POST)

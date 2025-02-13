@@ -1,10 +1,20 @@
 from django import forms
-from .models import Patient, SOAPNote, DailyMemo
+from .models import Patient, SOAPNote, DailyMemo, DPJP
+from django_select2.forms import Select2Widget
 
 class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
-        fields = ['name', 'bangsal', 'room']
+        fields = ['medical_record_number', 'name', 'date_of_birth', 'date_of_admission', 'bangsal', 'room', 'dpjp']
+        widgets = {
+            'medical_record_number': forms.TextInput(attrs={'placeholder': 'Optional', 'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'date_of_admission': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'bangsal': forms.TextInput(attrs={'class': 'form-control'}),
+            'room': forms.TextInput(attrs={'class': 'form-control'}),
+            'dpjp': Select2Widget(attrs={'class': 'form-control'})
+        }
 
 class SOAPNoteForm(forms.ModelForm):
     class Meta:

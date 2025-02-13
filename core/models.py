@@ -2,13 +2,39 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from ckeditor.fields import RichTextField
+from django.utils import timezone
 
-class Patient(models.Model):
+class DPJP(models.Model):
     name = models.CharField(max_length=100)
-    bangsal = models.CharField(max_length=50)
-    room = models.CharField(max_length=20)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"dr. {self.name}"
+
+    class Meta:
+        verbose_name = 'DPJP'
+        verbose_name_plural = 'DPJPs'
+        ordering = ['name']
+
+class Patient(models.Model):
+    medical_record_number = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=100)
+    date_of_birth = models.DateField(null=True)
+    age = models.IntegerField(blank=True, null=True)
+    date_of_admission = models.DateField(default=timezone.now)
+    bangsal = models.CharField(max_length=50)
+    room = models.CharField(max_length=20)
+    dpjp = models.ForeignKey(DPJP, on_delete=models.PROTECT, verbose_name='DPJP')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.date_of_birth:
+            today = self.date_of_admission or self.created_at.date()
+            self.age = today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} - Room {self.room}"
