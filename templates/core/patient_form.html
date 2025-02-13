@@ -13,7 +13,19 @@
                     <h2 class="card-title mb-4">Add New Patient</h2>
                     <form method="post">
                         {% csrf_token %}
-                        {{ form|crispy }}
+                        {{ form.medical_record_number|as_crispy_field }}
+                        {{ form.name|as_crispy_field }}
+                        {{ form.date_of_birth|as_crispy_field }}
+                        {{ form.date_of_admission|as_crispy_field }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.bangsal|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.room|as_crispy_field }}
+                            </div>
+                        </div>
+                        {{ form.dpjp|as_crispy_field }}
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                             <a href="{% url 'patient_list' %}" class="btn btn-outline-secondary me-md-2">
                                 <i class="bi bi-x-circle me-2"></i>Cancel
